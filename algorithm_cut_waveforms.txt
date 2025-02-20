@@ -1,0 +1,21 @@
+ο αλγόριθμος που κόβουν τις καταγραφες στην ESMdb, δίνεται παρακάτω από την Claudia.
+
+Dear Nikos,
+
+waveforms available through EIDA or IRIS web services are trimmed during  the uploading on the ESM database.
+In this case, the following empirical formula, which depends on origin time (t), magnitude (M), and hypocentral distance (HYPO), is applied:
+
+min_cut = -32.54864+(0.0147805*M)+(0.1946899*HYPO)-30
+max_cut = -22.89723+(21.616684*M)+(0.3763951*HYPO)+120
+
+if int(DEPTH) <= 35:
+    min_cut = min_cut - 30
+    max_cut = max_cut + 60
+t1 = t + min_cut
+t2 = t + max_cut
+
+
+After data upload, in the current processing scheme the traces are trimmed  20s before P wave arrival (from travel times) and 80s after S wave arrival (from travel times).
+
+Ciao,
+Claudia
