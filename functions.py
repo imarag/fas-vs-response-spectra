@@ -56,13 +56,16 @@ def compute_fourier(tr: Trace) -> dict:
     fas_freqs = np.linspace(0, fnyq, sl)
     fft_amp = np.fft.fft(tr.data[:npts])
     fft_amp_abs = delta * np.abs(fft_amp)[0:sl]
-
+    fas_freqs[fas_freqs == 0] = np.nan
     fas_freqs_interp = np.logspace(
         np.log10(FOURIER_MIN_FREQ), 
         np.log10(FOURIER_MAX_FREQ), 
         num=FOURIER_TOTAL_FREQS
     )
-    fas_amps_interp = np.interp(fas_freqs_interp, fas_freqs, fft_amp_abs)
+
+ # fas_amps_interp = np.interp(fas_freqs_interp, fas_freqs, fft_amp_abs)
+    fas_amps_interp = np.power(10, np.interp(np.log10(fas_freqs_interp), np.log10(fas_freqs), np.log10(fft_amp_abs)))
+    
     
     fas_amps_konno = konno_ohmachi_smoothing(
         fas_amps_interp, 
@@ -93,7 +96,7 @@ def apply_signal_to_noise_ratio(noise_fas_amps: np.ndarray, signal_fas_amps: np.
 
 def compute_response_spectra(trace: Trace) -> dict:
     periods = np.linspace(0.01, 20, 300)
-    rs = NigamJennings(trace.data, 1/trace.stats.sampling_rate, periods, damping=0.5, units="m/s/s")
+    rs = NigamJennings(trace.data, 1/trace.stats.sampling_rate, periods, damping=0.05, units="m/s/s")
     spec, ts, acc, vel, dis = rs.evaluate()
     return {
         "displacement": dis,
