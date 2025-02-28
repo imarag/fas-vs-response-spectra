@@ -9,7 +9,7 @@ import numpy as np
 from math import sqrt
 from scipy.integrate import cumulative_trapezoid
 import matplotlib.pyplot as plt
-from sm_utils import (_save_image,
+from response_spectra_scripts.sm_utils import (_save_image,
                       get_time_vector,
                       convert_accel_units,
                       get_velocity_displacement)
